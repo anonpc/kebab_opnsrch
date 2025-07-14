@@ -1,0 +1,79 @@
+# Production-ready configuration for OpenSearch Worker Search
+
+api:
+  host: "0.0.0.0"
+  port: 8000
+  workers: 4
+  reload: false
+  enable_docs: true
+  allowed_origins:
+    - "https://your-frontend-domain.com"
+    - "http://localhost:3000"
+
+opensearch:
+  host: "localhost:9200"
+  index_name: "workers"
+  username: null
+  password: null
+  timeout: 30
+  max_retries: 3
+  use_ssl: false
+  verify_certs: false
+  ssl_show_warn: false
+
+security:
+  enable_auth: true
+  jwt_secret: "your-super-secret-jwt-key-change-in-production"
+  jwt_expiration_hours: 24
+  rate_limiting_enabled: true
+  requests_per_minute: 100
+  burst_limit: 200
+  max_query_length: 1000
+  allowed_file_types:
+    - ".csv"
+    - ".json"
+  max_file_size_mb: 50
+
+cache:
+  enabled: true
+  backend: "memory"  # or "redis"
+  ttl_seconds: 3600
+  max_size: 1000
+  redis_url: null  # "redis://localhost:6379"
+
+logging:
+  level: "INFO"
+  directory: "logs"
+  max_file_size_mb: 100
+  backup_count: 5
+  access_log: true
+
+model:
+  name: "sentence-transformers/all-MiniLM-L6-v2"
+  device: "auto"
+  batch_size: 32
+  cache_dir: null
+
+indexing:
+  strategy: "startup"  # startup для production - гарантирует данные при запуске
+  auto_index_on_startup: true
+  check_interval_seconds: 600  # 10 минут для production
+  max_startup_wait_seconds: 120  # 2 минуты максимум ожидания
+  force_reindex_on_startup: false
+  triggers:
+    empty_index: true
+    missing_index: true
+    data_age_hours: 24
+
+processing:
+  max_workers: 8
+  torch_num_threads: 2
+  io_thread_ratio: 0.3
+  light_thread_ratio: 0.3
+  cpu_thread_ratio: 0.4
+
+scheduler:
+  enabled: true
+  reindex_interval_hours: 24
+  max_new_entries: 100
+  check_interval_minutes: 60

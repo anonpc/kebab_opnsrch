@@ -1,0 +1,86 @@
+data:
+  raw: 'data/raw/workers copy half.csv'
+  processed: 'data/processed/workers copy half.csv'
+  new_workers: 'data/raw/new_workers.csv'
+
+model:
+  name: 'shared/sbert_large_nlu_ru'
+  device: 'auto'
+  batch_size: 128
+
+index:
+  faiss_path: 'data/index/faiss_index.bin.ivf'
+  bm25_path: 'data/index/lexical_index.pkl'
+  chunk_size: 100
+
+opensearch:
+  host: "http://opensearch:9200"  # Для Docker окружения
+  index_name: "workers"
+  timeout: 30
+  max_retries: 3
+  embedding_dimension: 768
+  
+search:
+  default_top_k: 20
+  minimum_should_match: 0.5
+  category_direct_match_boost: 0.4
+
+processing:
+  max_workers: 12
+  torch_num_threads: 4
+  io_thread_ratio: 0.2
+  light_thread_ratio: 0.2
+  cpu_thread_ratio: 0.6
+
+indexing:
+  strategy: "lazy"  # lazy, startup, background, scheduled
+  auto_index_on_startup: true
+  check_interval_seconds: 300
+  max_startup_wait_seconds: 60
+  force_reindex_on_startup: false
+  triggers:
+    empty_index: true
+    missing_index: true
+    data_age_hours: 24
+
+scheduler:
+  enabled: true
+  reindex_interval_hours: 168
+  max_new_entries: 250
+  check_interval_minutes: 60
+
+logging:
+  level: "INFO"
+  format: "structured"  # structured или simple
+  directory: "logs"
+  max_file_size_mb: 100
+  backup_count: 5
+  enable_console: true
+  enable_file: true
+
+security:
+  enable_auth: false  # Пока отключено для разработки
+  jwt_secret: "your-secret-key-here"
+  jwt_expiration_hours: 24
+  rate_limiting:
+    enabled: true
+    requests_per_minute: 100
+    burst_limit: 200
+  input_validation:
+    max_query_length: 1000
+    allowed_file_types: [".csv", ".json"]
+    max_file_size_mb: 50
+
+performance:
+  caching:
+    enabled: true
+    type: "memory"  # memory, redis
+    ttl_seconds: 3600
+    max_size: 1000
+  connection_pooling:
+    enabled: true
+    max_connections: 20
+    min_connections: 5
+  async_processing:
+    enabled: true
+    max_workers: 4

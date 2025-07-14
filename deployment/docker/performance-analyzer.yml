@@ -1,0 +1,118 @@
+# Конфигурация OpenSearch Performance Analyzer
+
+# Настройки веб-сервиса
+webservice-listener-port: 9600
+webservice-bind-host: 0.0.0.0
+
+# Настройки сбора метрик
+metrics-location: /dev/shm/performanceanalyzer/
+metrics-deletion-interval: 300
+
+# Настройки сборщика Performance Analyzer
+enable-metrics-collection: true
+
+# Сборщик статистики узлов
+node-stats-collector:
+  enabled: true
+  collection-interval: 5000  # 5 секунд
+
+# Сборщик метрик кластера
+cluster-metrics-collector:
+  enabled: true
+  collection-interval: 30000  # 30 секунд
+
+# Сборщик метрик индексов
+index-metrics-collector:
+  enabled: true
+  collection-interval: 60000  # 60 секунд
+
+# Сборщик статистики шардов
+shard-stats-collector:
+  enabled: true
+  collection-interval: 30000
+
+# Сборщик circuit breaker
+circuit-breaker-collector:
+  enabled: true
+  collection-interval: 5000
+
+# Сборщик пула потоков
+thread-pool-collector:
+  enabled: true
+  collection-interval: 5000
+
+# Сборщик информации о GC
+gc-info-collector:
+  enabled: true
+  collection-interval: 5000
+
+# Сборщик метрик кучи
+heap-metrics-collector:
+  enabled: true
+  collection-interval: 5000
+
+# Сборщик статистики кэша
+cache-stats-collector:
+  enabled: true
+  collection-interval: 5000
+
+# Сборщик использования диска
+disk-utilization-collector:
+  enabled: true
+  collection-interval: 5000
+
+# Сборщик использования сети
+network-utilization-collector:
+  enabled: true
+  collection-interval: 5000
+
+# Сборщик метрик мастера
+master-metrics-collector:
+  enabled: true
+  collection-interval: 30000
+
+# Сборщик обнаружения неисправностей
+fault-detection-collector:
+  enabled: true
+  collection-interval: 30000
+
+# Метрики HTTP запросов
+http-request-collector:
+  enabled: true
+  collection-interval: 5000
+
+# Сборщик обратного давления поиска
+search-back-pressure-collector:
+  enabled: true
+  collection-interval: 5000
+
+# Сборщик AdmissionControl
+admission-control-collector:
+  enabled: true
+  collection-interval: 5000
+
+# Сборщик использования ресурсов
+resource-utilization-collector:
+  enabled: true
+  collection-interval: 5000
+
+# Настройки очистки
+cleanup:
+  file-retention-count: 12  # Хранить 12 файлов (1 час данных с интервалом 5 мин)
+  db-file-cleanup-size: 1000
+
+# Настройки пакетных метрик
+batch-metrics:
+  enabled: true
+  batch-size: 10
+  batch-timeout: 1000
+
+# Настройки RCA (анализ первопричин)
+rca:
+  enabled: true
+  rca-store-location: /tmp/performanceanalyzer/rca/
+  
+# Логирование
+logging:
+  level: INFO
+  log-location: /usr/share/opensearch/logs/performanceanalyzer.log 

@@ -1,0 +1,68 @@
+# DEPRECATED: This file is no longer used
+# 
+# The logging configuration has been migrated to the unified Pydantic configuration system.
+# Please use environment variables or the main configuration files instead.
+#
+# Migration Guide:
+# 
+# OLD (this file):
+# ```yaml
+# version: 1
+# handlers:
+#   console:
+#     class: logging.StreamHandler
+#     level: INFO
+#     formatter: simple
+# ```
+#
+# NEW (environment variables):
+# ```bash
+# export LOG_LEVEL=INFO
+# export LOG_ENABLE_CONSOLE=true
+# export LOG_FORMAT=simple
+# ```
+#
+# Or in YAML config files (config.yaml/production.yaml):
+# ```yaml
+# logging:
+#   level: "INFO"
+#   enable_console: true
+#   format: "simple"
+# ```
+#
+# See src/config/README.md for complete migration guide.
+
+version: 1
+handlers:
+  console:
+    class: logging.StreamHandler
+    level: INFO
+    formatter: simple
+  indexing_file:
+    class: logging.FileHandler
+    filename: logs/indexing.log
+    level: INFO
+    formatter: simple
+  prediction_file:
+    class: logging.FileHandler
+    filename: logs/prediction.log
+    level: INFO
+    formatter: simple
+  performance_file:
+    class: logging.FileHandler
+    filename: logs/performance.log
+    level: INFO
+    formatter: simple
+formatters:
+  simple:
+    format: '%(asctime)s - %(levelname)s - %(message)s'
+loggers:
+  indexing:
+    level: INFO
+    handlers: [console, indexing_file]
+  prediction:
+    level: INFO
+    handlers: [console, prediction_file]
+  performance:
+    level: INFO
+    handlers: [console, performance_file] 

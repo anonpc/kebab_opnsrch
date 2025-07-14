@@ -1,0 +1,61 @@
+# Development Docker Compose Configuration
+# This file extends the main docker-compose.yml with development-specific settings
+#
+# Usage:
+#   docker-compose -f ../../docker-compose.yml -f docker-compose.yml up
+#
+# This approach eliminates configuration duplication while allowing environment-specific overrides
+
+services:
+  opensearch:
+    environment:
+      # Development overrides
+      - "OPENSEARCH_JAVA_OPTS=-Xms1g -Xmx1g"  # Lower memory for development
+      - OPENSEARCH_SECURITY_DISABLED=true
+      - OPENSEARCH_SSL_HTTP_ENABLED=false
+      - OPENSEARCH_SSL_TRANSPORT_ENABLED=false
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+        reservations:
+          memory: 1G
+
+  api:
+    environment:
+      # Development-specific environment variables
+      - API_RELOAD=true
+      - DEBUG=true
+      - LOG_LEVEL=DEBUG
+      - ENVIRONMENT=development
+      - API_WORKERS=1
+      - UVICORN_WORKERS=1
+      
+      # Threading optimization for development
+      - MAX_WORKERS=4
+      - THREAD_NAME_PREFIX=dev_worker
+      - OMP_NUM_THREADS=2
+      - MKL_NUM_THREADS=2
+      - NUMEXPR_NUM_THREADS=2
+      - TORCH_NUM_THREADS=2
+      
+      # Cache settings for development
+      - CACHE_SIZE=500
+      - QUERY_CACHE_SIZE=500
+      - RESPONSE_CACHE_SIZE=250
+      
+      # Scheduler settings
+      - ENABLE_SCHEDULER=true
+      - SCHEDULER_INTERVAL=168
+      - DOCKER_ENV=true
+    deploy:
+      resources:
+        limits:
+          cpus: "4"
+          memory: 2G
+        reservations:
+          cpus: "1"
+          memory: 1G
+    volumes:
+      # Additional development volumes
+      - ../../src:/app/src:ro  # Mount source for development 

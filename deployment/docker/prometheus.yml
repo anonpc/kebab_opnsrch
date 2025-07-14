@@ -1,0 +1,46 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+rule_files:
+  # - "first_rules.yml"
+  # - "second_rules.yml"
+
+scrape_configs:
+  # Основные метрики OpenSearch
+  - job_name: 'opensearch'
+    static_configs:
+      - targets: ['opensearch:9200']
+    metrics_path: /_prometheus/metrics
+    scrape_interval: 30s
+    scrape_timeout: 10s
+
+  # Метрики Performance Analyzer OpenSearch
+  - job_name: 'opensearch-performance-analyzer'
+    static_configs:
+      - targets: ['opensearch:9600']
+    metrics_path: /_opendistro/_performanceanalyzer/metrics
+    params:
+      metrics: ['CPU_Utilization', 'Memory_Utilization', 'Disk_Utilization', 'GC_Info']
+    scrape_interval: 30s
+    scrape_timeout: 10s
+
+  # Метрики API приложения
+  - job_name: 'api-application'
+    static_configs:
+      - targets: ['api:8005']
+    metrics_path: /health/
+    scrape_interval: 15s
+    scrape_timeout: 5s
+
+  # Метрики Redis (если добавлен redis_exporter)
+  - job_name: 'redis'
+    static_configs:
+      - targets: ['redis:6379']
+    scrape_interval: 30s
+    scrape_timeout: 10s
+
+  # Самомониторинг Prometheus
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090'] 
