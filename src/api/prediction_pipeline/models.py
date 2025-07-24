@@ -49,6 +49,8 @@ class WorkerResult(BaseModel):
     price: Optional[float] = Field(None, ge=0, description="Цена")
     location: Optional[str] = Field(None, description="Местоположение")
     score: Optional[float] = Field(None, ge=0, description="Релевантность")
+    photo_urls: List[str] = Field(default_factory=list, description="URLs фотографий")
+    executor_telegram_id: Optional[int] = Field(None, description="Telegram ID исполнителя")
 
 class QueryInfo(BaseModel):
     """Информация о запросе"""
@@ -102,6 +104,8 @@ class WorkerCreate(BaseModel):
     price: Optional[float] = Field(None, ge=0, description="Цена")
     location: Optional[str] = Field(None, max_length=200, description="Местоположение")
     url: Optional[str] = Field(None, max_length=500, description="URL профиля")
+    photo_urls: List[str] = Field(default_factory=list, description="URLs фотографий")
+    executor_telegram_id: Optional[int] = Field(None, description="Telegram ID исполнителя")
 
     @field_validator('title')
     @classmethod
@@ -124,6 +128,25 @@ class WorkerCreate(BaseModel):
             return v.strip()
         return v
 
+    @field_validator('photo_urls')
+    @classmethod
+    def validate_photo_urls(cls, v):
+        if v:
+            # Проверяем что все элементы массива - строки
+            for url in v:
+                if not isinstance(url, str):
+                    raise ValueError('All photo URLs must be strings')
+                if len(url) > 500:
+                    raise ValueError('Photo URL too long')
+        return v
+
+    @field_validator('executor_telegram_id')
+    @classmethod
+    def validate_executor_telegram_id(cls, v):
+        if v is not None and v <= 0:
+            raise ValueError('Telegram ID must be positive integer')
+        return v
+
 class WorkerUpdate(BaseModel):
     """Модель для обновления работника"""
     title: Optional[str] = Field(None, min_length=2, max_length=200, description="Название/специальность")
@@ -133,6 +156,27 @@ class WorkerUpdate(BaseModel):
     price: Optional[float] = Field(None, ge=0, description="Цена")
     location: Optional[str] = Field(None, max_length=200, description="Местоположение")
     url: Optional[str] = Field(None, max_length=500, description="URL профиля")
+    photo_urls: Optional[List[str]] = Field(None, description="URLs фотографий")
+    executor_telegram_id: Optional[int] = Field(None, description="Telegram ID исполнителя")
+
+    @field_validator('photo_urls')
+    @classmethod
+    def validate_photo_urls(cls, v):
+        if v is not None:
+            # Проверяем что все элементы массива - строки
+            for url in v:
+                if not isinstance(url, str):
+                    raise ValueError('All photo URLs must be strings')
+                if len(url) > 500:
+                    raise ValueError('Photo URL too long')
+        return v
+
+    @field_validator('executor_telegram_id')
+    @classmethod
+    def validate_executor_telegram_id(cls, v):
+        if v is not None and v <= 0:
+            raise ValueError('Telegram ID must be positive integer')
+        return v
 
 class WorkerDeleteRequest(BaseModel):
     """Модель запроса на удаление работника"""
@@ -158,6 +202,8 @@ class WorkerResponse(BaseModel):
     location: Optional[str] = Field(None, description="Местоположение")
     url: Optional[str] = Field(None, description="URL профиля")
     indexed_at: Optional[str] = Field(None, description="Время индексации")
+    photo_urls: List[str] = Field(default_factory=list, description="URLs фотографий")
+    executor_telegram_id: Optional[int] = Field(None, description="Telegram ID исполнителя")
 
 class OperationResponse(BaseModel):
     """Модель ответа операции"""

@@ -98,6 +98,8 @@ async def search_workers(
                     "category": source.get('category', ''),
                     "price": source.get('price', 0),
                     "location": source.get('location', ''),
+                    "photo_urls": source.get('photo_urls', []),
+                    "executor_telegram_id": source.get('executor_telegram_id'),
                     "score": hit['_score']
                 })
             
@@ -118,6 +120,8 @@ async def search_workers(
                     category=result.get("category"),
                     price=result.get("price"),
                     location=result.get("location"),
+                    photo_urls=result.get("photo_urls", []),
+                    executor_telegram_id=result.get("executor_telegram_id"),
                     score=result.get("score")
                 )
             )

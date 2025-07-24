@@ -510,7 +510,7 @@ class OpenSearchEngine:
         search_body = {
             "query": main_query,
             "size": top_k,
-            "_source": ["title", "description", "category", "seller_name", "location", "price", "url"],
+            "_source": ["title", "description", "category", "seller_name", "location", "price", "url", "photo_urls", "executor_telegram_id"],
             "highlight": {
                 "fields": {
                     "title": {},
@@ -662,6 +662,8 @@ class OpenSearchEngine:
                         'location': source.get('location', ''),
                         'price': float(source.get('price', 0.0)),
                         'url': source.get('url', ''),
+                        'photo_urls': source.get('photo_urls', []),
+                        'executor_telegram_id': source.get('executor_telegram_id'),
                         'score': float(score),
                         'rank': i + 1
                     }

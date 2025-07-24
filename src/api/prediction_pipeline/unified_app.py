@@ -249,6 +249,8 @@ class SearchService:
                     category=result.get('category', ''),
                     price=result.get('price', 0),
                     location=result.get('location', ''),
+                    photo_urls=result.get('photo_urls', []),
+                    executor_telegram_id=result.get('executor_telegram_id'),
                     score=result.get('score', 0.0)
                 ))
             
