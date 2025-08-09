@@ -100,6 +100,7 @@ async def search_workers(
                     "location": source.get('location', ''),
                     "photo_urls": source.get('photo_urls', []),
                     "executor_telegram_id": source.get('executor_telegram_id'),
+                    "rating": source.get('rating'),
                     "score": hit['_score']
                 })
             
@@ -122,6 +123,7 @@ async def search_workers(
                     location=result.get("location"),
                     photo_urls=result.get("photo_urls", []),
                     executor_telegram_id=result.get("executor_telegram_id"),
+                    rating=result.get("rating"),
                     score=result.get("score")
                 )
             )

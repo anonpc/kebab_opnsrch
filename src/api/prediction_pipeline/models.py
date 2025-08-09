@@ -51,6 +51,7 @@ class WorkerResult(BaseModel):
     score: Optional[float] = Field(None, ge=0, description="Релевантность")
     photo_urls: List[str] = Field(default_factory=list, description="URLs фотографий")
     executor_telegram_id: Optional[int] = Field(None, description="Telegram ID исполнителя")
+    rating: Optional[float] = Field(None, ge=0, le=5, description="Рейтинг")
 
 class QueryInfo(BaseModel):
     """Информация о запросе"""
@@ -106,6 +107,7 @@ class WorkerCreate(BaseModel):
     url: Optional[str] = Field(None, max_length=500, description="URL профиля")
     photo_urls: List[str] = Field(default_factory=list, description="URLs фотографий")
     executor_telegram_id: Optional[int] = Field(None, description="Telegram ID исполнителя")
+    rating: Optional[float] = Field(None, ge=0, le=5, description="Рейтинг")
 
     @field_validator('title')
     @classmethod
@@ -158,6 +160,7 @@ class WorkerUpdate(BaseModel):
     url: Optional[str] = Field(None, max_length=500, description="URL профиля")
     photo_urls: Optional[List[str]] = Field(None, description="URLs фотографий")
     executor_telegram_id: Optional[int] = Field(None, description="Telegram ID исполнителя")
+    rating: Optional[float] = Field(None, ge=0, le=5, description="Рейтинг")
 
     @field_validator('photo_urls')
     @classmethod
@@ -204,6 +207,7 @@ class WorkerResponse(BaseModel):
     indexed_at: Optional[str] = Field(None, description="Время индексации")
     photo_urls: List[str] = Field(default_factory=list, description="URLs фотографий")
     executor_telegram_id: Optional[int] = Field(None, description="Telegram ID исполнителя")
+    rating: Optional[float] = Field(None, ge=0, le=5, description="Рейтинг")
 
 class OperationResponse(BaseModel):
     """Модель ответа операции"""

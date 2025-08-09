@@ -49,6 +49,7 @@ class WorkerService:
                 "url": worker_data.url,
                 "photo_urls": worker_data.photo_urls,
                 "executor_telegram_id": worker_data.executor_telegram_id,
+                "rating": worker_data.rating,
                 "combined_text": combined_text,
                 "indexed_at": datetime.now(timezone.utc).isoformat()
             }
@@ -80,6 +81,7 @@ class WorkerService:
                 url=worker_data.url,
                 photo_urls=worker_data.photo_urls,
                 executor_telegram_id=worker_data.executor_telegram_id,
+                rating=worker_data.rating,
                 indexed_at=doc["indexed_at"]
             )
 
@@ -115,6 +117,7 @@ class WorkerService:
             url=source.get("url"),
             photo_urls=source.get("photo_urls", []),
             executor_telegram_id=source.get("executor_telegram_id"),
+            rating=source.get("rating"),
             indexed_at=source.get("indexed_at")
         )
     
@@ -148,6 +151,8 @@ class WorkerService:
                 update_data["photo_urls"] = worker_data.photo_urls
             if worker_data.executor_telegram_id is not None:
                 update_data["executor_telegram_id"] = worker_data.executor_telegram_id
+            if worker_data.rating is not None:
+                update_data["rating"] = worker_data.rating
 
             if not update_data:
                 raise HTTPException(status_code=400, detail="No fields to update")
@@ -191,6 +196,7 @@ class WorkerService:
                 url=updated_source.get("url"),
                 photo_urls=updated_source.get("photo_urls", []),
                 executor_telegram_id=updated_source.get("executor_telegram_id"),
+                rating=updated_source.get("rating"),
                 indexed_at=updated_source.get("indexed_at")
             )
 
@@ -337,6 +343,7 @@ class WorkerService:
                     url=source.get("url"),
                     photo_urls=source.get("photo_urls", []),
                     executor_telegram_id=source.get("executor_telegram_id"),
+                    rating=source.get("rating"),
                     indexed_at=source.get("indexed_at")
                 )
                 workers.append(worker)
